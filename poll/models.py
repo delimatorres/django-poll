@@ -103,6 +103,12 @@ class Item(models.Model):
     value = models.CharField(max_length=250,
                              verbose_name=_('Value'),
                              help_text=_('Its a title of item'))
+
+
+    subtitle = models.CharField(max_length=250,
+                             verbose_name=_('Subtitle'),
+                             help_text=_('Its a subtitle of item'))
+
     index = models.SmallIntegerField(default='0',
                                      verbose_name=_('Position'),
                                      help_text=_('Its for positioning only'))

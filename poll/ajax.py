@@ -3,7 +3,7 @@ from poll.models import Poll, Item, Vote, Choice
 from django.db import transaction
 from django.utils import simplejson
 from utils import set_cookie
-
+from django.views.decorators.csrf import csrf_exempt
 
 def authpass(user, queue):
     if queue != None:
@@ -14,6 +14,7 @@ def authpass(user, queue):
 
 
 #TODO: Need to optimize
+@csrf_exempt
 @transaction.commit_on_success
 def poll_ajax_vote(request, poll_pk):
     if request.is_ajax():
@@ -24,7 +25,7 @@ def poll_ajax_vote(request, poll_pk):
                     return HttpResponse('Non-authenticated users can\'t vote',
                                         status=400)
 
-            chosen_items = simplejson.loads(request.POST['chosen_items'])
+            item_pk = chosen_items = simplejson.loads(request.POST['chosen_items'])
         except:
             return HttpResponse('Wrong parameters', status=400)
 
@@ -37,14 +38,17 @@ def poll_ajax_vote(request, poll_pk):
                                    ip=request.META['REMOTE_ADDR'],
                                    user=user)
         try:
-            for item_pk, value in chosen_items.items():
-                item = Item.objects.get(pk=item_pk)
+            item = Item.objects.get(pk=item_pk)
+            Choice.objects.create(vote=vote, item=item)
+            # for item_pk, value in chosen_items.items():
+            #     item = Item.objects.get(pk=item_pk)
 
-                if item.userbox:
-                    Choice.objects.create(vote=vote, item=item,
-                                          uservalue=value)
-                else:
-                    Choice.objects.create(vote=vote, item=item)
+            #     if item.userbox:
+            #         Choice.objects.create(vote=vote, item=item,
+            #                               uservalue=value)
+            #     else:
+            #         Choice.objects.create(vote=vote, item=item)
+
         except:
             return HttpResponse('Data recognition failed', status=400)
 
@@ -56,6 +60,7 @@ def poll_ajax_vote(request, poll_pk):
     return HttpResponse(status=400)
 
 
+@csrf_exempt
 def poll_ajax_result(request, poll_pk):
     if request.is_ajax():
         try:

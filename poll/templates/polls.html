@@ -13,7 +13,7 @@
 
 <div class="dps_poll_content_{{ poll.pk }}">
 	<p class="dps_poll_warning_message">
-		<noscript>		
+		<noscript>
 			{% trans "WARNING: JavaScript is disabled in your browser. Please, turn it on to vote." %}
 		</noscript>
 	</p>
@@ -24,7 +24,7 @@
 		<div class="dps_poll_userspace">
 			{% trans "User" %}: {{ user }}
 		</div>
-		{% endif %} 
+		{% endif %}
 		<div class="dps_poll_body">
 			{% if poll.get_cookie_name in request.COOKIES %}
 				<p>{% trans "You already voted" %}.</p>

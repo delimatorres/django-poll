@@ -5,9 +5,8 @@ from django.utils.translation import ugettext_lazy as _
 
 class PollItemInline(admin.TabularInline):
     model = Item
-    extra = 5
     max_num = 10
-    fields = ('userbox', 'value', 'index', 'vote_count',)
+    fields = ('userbox', 'value', 'subtitle', 'index', 'vote_count',)
     readonly_fields = ('vote_count',)
 
 
@@ -27,7 +26,6 @@ class PollAdmin(admin.ModelAdmin):
 
 class VoteChoiceItemInline(admin.TabularInline):
     model = Choice
-    extra = 5
     max_num = 10
     readonly_fields = ('item', 'uservalue')
 
